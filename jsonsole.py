@@ -11,13 +11,17 @@ def main(argv):
     config_file = file("config.json")
     config = json.loads(config_file.read())
 
-    server   = config["connection"]["server"]
-    username = config["connection"]["username"]
-    password = config["connection"]["password"]
+    connection = config["connection"]
+    server   = connection["server"]
+    username = connection["username"]
+    password = connection["password"]
+    ssl = True if connection["ssl"].lower() == "true" else False
+
+    http = httpauth.HttpAuth(server, ssl, username, password)
 
     while True:
         page = raw_input(">>>")
-        response = httpauth.get_https_response(server,page,username,password)
+        response = http.get_https_response(page)
 
         json_response = response.read()
         remote_data = json.loads(json_response)
@@ -28,5 +32,5 @@ if __name__=="__main__":
     try:
         main(sys.argv[1:])
     except KeyboardInterrupt:
-        print()
+        print("")
         sys.exit(0)
