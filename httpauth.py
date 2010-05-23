@@ -13,9 +13,15 @@ def get_https_response(server,page,username,password):
     auth = 'Basic ' + string.strip(base64.encodestring(username + ':' + password))
 
     # h = httplib.HTTP(server)
-    h = httplib.HTTPSConnection(server)
-    h.connect()
-    h.putrequest('GET', page)
-    h.putheader('Authorization', auth )
-    h.endheaders()
-    return h.getresponse()
+    connection = httplib.HTTPSConnection(server)
+    connection.connect()
+    connection.putrequest('GET', ensure_path(page))
+    connection.putheader('Authorization', auth )
+    connection.endheaders()
+    return connection.getresponse()
+
+def ensure_path(page):
+    """
+    Ensures that the path starts with a '/'
+    """
+    return page if page.startswith('/') else "/{0}".format(page)
