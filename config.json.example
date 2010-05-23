@@ -1,0 +1,7 @@
+{
+    "connection": {
+        "server": "example.com",
+        "username": "user",
+        "password": "pa$$w0rd"
+    }
+}
